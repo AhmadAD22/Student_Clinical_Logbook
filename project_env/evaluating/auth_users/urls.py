@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('',views.CustomAuthToken.as_view()),
-    path('api',views.hello_world),
+    path('signup/',views.CreateUser.as_view({'post':'create'})),
 ]

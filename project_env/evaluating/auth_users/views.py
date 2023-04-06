@@ -1,14 +1,49 @@
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
+from .serializers import CraeteUserSerializer
+from .models import UserProfile
+from django.contrib.auth.models import Group
 
-from rest_framework.decorators import api_view
 
-@api_view(['GET', 'POST'])
-def hello_world(request):
-    if request.method == 'POST':
-        return Response({"message": "Got some data!", "data": request.data})
-    return Response({"message": "Hello, world!"})
+
+
+
+
+
+class CreateUser(mixins.CreateModelMixin,GenericViewSet):
+
+    queryset =User.objects.all()
+    serializer_class=CraeteUserSerializer
+    
+    def create(self, serializer):
+        
+        test_id=UserProfile.objects.filter(user_id=self.request.data.get("userid"))
+        if(test_id):
+                return Response("Id  already exists")
+           
+        test_user=User.objects.filter(username=self.request.data.get("username"))
+        
+        if (test_user):
+            return Response("Username  already exists")
+        else:
+            new_user = User.objects.create(username=self.request.data.get("username"),
+                                       first_name=self.request.data.get("first_name"),
+                                       last_name=self.request.data.get("last_name"),
+                                       )
+            new_user.set_password(self.request.data.get("password"))
+            group = Group.objects.get(name=self.request.data.get("group"))
+            group.user_set.add(new_user)
+            new_user.save()
+            
+            new_profile=UserProfile.objects.create(user_name=new_user,user_id=self.request.data.get("userid") )
+                                                   
+            new_profile.save()
+            return Response("Ok")
+
 
 #Get permission by Group
 def getgroup(user):

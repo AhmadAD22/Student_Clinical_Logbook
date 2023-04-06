@@ -13,7 +13,6 @@ class Action (models.Model):
 class ActionInformation(models.Model):
     # Complexity level map
     levels=(('L','Low'),('M','Medium'),('H','High'))
-    
     statuses=((1,1),(2,2),(3,3),(4,4))
     
     # Table fields
