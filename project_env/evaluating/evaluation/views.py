@@ -24,8 +24,6 @@ class DetaledEvaluationMixins(mixins.RetrieveModelMixin,
     def delete (self,request,*args,**kwargs):
         return self.destroy(request,*args,**kwargs)
     
-    
-    
 class DetaledScientificAbstractMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
                         mixins.CreateModelMixin,
