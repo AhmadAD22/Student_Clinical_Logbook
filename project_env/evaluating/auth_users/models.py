@@ -11,17 +11,13 @@ from django.contrib.auth.models import User
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-
-
-
-
-
+        
 class UserProfile(models.Model):
 
-    user_name = models.OneToOneField(User, related_name='profile',on_delete=models.CASCADE)
-    user_id=  models.PositiveIntegerField(unique=True)
+    user= models.OneToOneField(User,related_name='profile',on_delete=models.CASCADE)
+    academic_id=  models.PositiveIntegerField(unique=True)
     def __str__(self):
-        return str(self.user_id)+' : '+self.user_name.username
+        return str(self.academic_id)+' : '+self.user.username
 
 
 
