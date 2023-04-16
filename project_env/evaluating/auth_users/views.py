@@ -32,20 +32,37 @@ class UserProfileViewSet(GenericViewSet,mixins.UpdateModelMixin):
             return Response("the group "+group_name+" is not exist")
 
     def retrive(self, request, *args, **kwargs):
+
         user=User.objects.filter(id=kwargs['pk']).first()
-        user_profile=UserProfile.objects.filter(user=user).first()
-        serializer = self.get_serializer(user_profile)
-        group=user.groups.all().first()
-        data = serializer.data
-        data['group'] =group.name
-        return Response(data)
-    
+        if user:    
+            user_profile=UserProfile.objects.filter(user=user).first()
+            serializer = self.get_serializer(user_profile)
+            group=user.groups.all().first()
+            if group:
+                data = serializer.data
+                data['group'] =group.name
+                return Response(data)
+            else:
+                data = serializer.data
+                data['group'] =" "
+                return Response(data)
+        else:
+             return Response("User does not exists!!!")
+         
     def destroy(self, request, *args, **kwargs):
         user=User.objects.filter(id=kwargs['pk']).first()
         user_profile=UserProfile.objects.filter(user=user).first()
         user_profile.delete()
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    def set_password(self, request, *args, **kwargs):
+        user=User.objects.filter(id=kwargs['pk']).first()
+        if user:
+            user.set_password(self.request.data.get("new_password"))
+            user.save()
+            return Response({"new_password":self.request.data.get("new_password")})
+        else:
+            return Response("User does not exists!!!")        
     
 class ListUsers(GenericViewSet):
     queryset=UserProfile.objects.all()
@@ -61,7 +78,7 @@ class CreateUser(mixins.CreateModelMixin,GenericViewSet):
     
     def create(self, serializer):
         
-        test_id=UserProfile.objects.filter(academic_id=self.request.data.get("userid"))
+        test_id=UserProfile.objects.filter(academic_id=self.request.data.get("academic_id"))
         if(test_id):
                 return Response("Id  already exists")
         try:
@@ -80,7 +97,7 @@ class CreateUser(mixins.CreateModelMixin,GenericViewSet):
             new_user.set_password(self.request.data.get("password"))
             group.user_set.add(new_user)
             new_user.save()
-            new_profile=UserProfile.objects.create(user=new_user,academic_id=self.request.data.get("userid") )                                    
+            new_profile=UserProfile.objects.create(user=new_user,academic_id=self.request.data.get("academic_id") )                                    
             new_profile.save()
             return Response({
                 "id": new_user.id,

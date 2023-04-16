@@ -24,4 +24,6 @@ urlpatterns = [
     path('action/',include('action.urls')),
     path('evaluation/',include('evaluation.urls')),
     path('supervisor/',include('supervisor.urls')),
+    path('leader/',include('leader.urls')),
+
 ]

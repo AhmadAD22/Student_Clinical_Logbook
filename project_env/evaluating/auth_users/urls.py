@@ -6,4 +6,5 @@ urlpatterns = [
     path('signup/',views.CreateUser.as_view({'post':'create'})),
     path('users/',views.ListUsers.as_view({'get':'list'})),
     path('users/<int:pk>',views.UserProfileViewSet.as_view({'put':'update','get':'retrive',"delete":"destroy"})),
+    path('users/<int:pk>/setpassword',views.UserProfileViewSet.as_view({'put':'set_password'})),
 ]

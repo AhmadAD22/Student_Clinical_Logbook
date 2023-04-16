@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'action',
     'evaluation',
     'supervisor',
+    'leader',
     #rest_framework
     'rest_framework',
     'rest_framework.authtoken',

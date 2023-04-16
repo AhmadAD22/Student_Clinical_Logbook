@@ -14,4 +14,4 @@ class ActionInformationSerializer(serializers.ModelSerializer):
 class AddActionInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model =ActionInformation
-        fields =['place','date','patient_type','complexity_level','status_number']
+        fields =['id','place','patient_type','complexity_level',]

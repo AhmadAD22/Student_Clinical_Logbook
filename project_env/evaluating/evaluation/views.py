@@ -9,7 +9,6 @@ from .serializers import EvaluationSerializer,ScientificAbstractSerializer
 # Create your views here.
 class DetaledEvaluationMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
-                        mixins.CreateModelMixin,
                         mixins.DestroyModelMixin,
                         generics.GenericAPIView):
     queryset=Evaluation.objects.all()
@@ -19,15 +18,11 @@ class DetaledEvaluationMixins(mixins.RetrieveModelMixin,
         return self.retrieve(request,*args,**kwargs)
     def put (self,request,*args,**kwargs):
         return self.update(request,*args,**kwargs)
-    def post (self,request,*args,**kwargs):
-        return self.create(request,*args,**kwargs)
     def delete (self,request,*args,**kwargs):
         return self.destroy(request,*args,**kwargs)
     
 class DetaledScientificAbstractMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
-                        mixins.CreateModelMixin,
-                        mixins.DestroyModelMixin,
                         generics.GenericAPIView):
     queryset=ScientificAbstract.objects.all()
     serializer_class=ScientificAbstractSerializer
@@ -36,7 +31,5 @@ class DetaledScientificAbstractMixins(mixins.RetrieveModelMixin,
         return self.retrieve(request,*args,**kwargs)
     def put (self,request,*args,**kwargs):
         return self.update(request,*args,**kwargs)
-    def post (self,request,*args,**kwargs):
-        return self.create(request,*args,**kwargs)
-    def delete (self,request,*args,**kwargs):
-        return self.destroy(request,*args,**kwargs)
+   
+   

@@ -1,5 +1,5 @@
 from django.db import models
-
+from student.models import Student
 
 class Action (models.Model):
     # Table fields
@@ -17,13 +17,19 @@ class ActionInformation(models.Model):
     
     # Table fields
     place=models.CharField(max_length=250)
-    date=models.DateField()
-    patient_type=models.CharField(max_length=50)
-    complexity_level=models.CharField( max_length=1,choices=levels)
-    status_number=models.PositiveSmallIntegerField(choices=statuses)
+    patient_type=models.CharField(max_length=100)
+    complexity_level=models.CharField(max_length=1,choices=levels)
+    case_number=models.PositiveSmallIntegerField(choices=statuses)
     #The relationsip with Action Table 
-    Action=models.ForeignKey(Action,on_delete=models.CASCADE)
+    Action=models.ForeignKey(Action,on_delete=models.SET_NULL,null=True,blank=True)
     
     def __str__(self):
         return self.Action.name+"/"+self.place
+    
+    # Aaaign the students to an actions 
+class ActionToStudent(models.Model):
+    action=models.ForeignKey(Action,on_delete=models.CASCADE)
+    student=models.ForeignKey(Student, on_delete=models.CASCADE)
+    done=models.BooleanField()
+    case_num=models.PositiveSmallIntegerField()
     

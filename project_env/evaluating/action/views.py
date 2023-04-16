@@ -13,7 +13,7 @@ class ActionViewset(GenericViewSet):
     queryset =Action.objects.all()
    # authentication_classes = [authentication.TokenAuthentication]
    
-    def list(self,request):
+    def list(self,request ,*args, **kwargs):
         queryset =Action.objects.all()
         serializer= ActionSerializer(queryset,many=True)
         return Response(serializer.data)
