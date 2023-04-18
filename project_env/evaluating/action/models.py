@@ -9,7 +9,6 @@ class Action (models.Model):
     def __str__(self):
         return self.name+"/type:"+self.type
 
-
 class ActionInformation(models.Model):
     # Complexity level map
     levels=(('L','Low'),('M','Medium'),('H','High'))
@@ -26,7 +25,7 @@ class ActionInformation(models.Model):
     def __str__(self):
         return self.Action.name+"/"+self.place
     
-    # Aaaign the students to an actions 
+# Aaaign the students to an actions 
 class ActionToStudent(models.Model):
     action=models.ForeignKey(Action,on_delete=models.CASCADE)
     student=models.ForeignKey(Student, on_delete=models.CASCADE)

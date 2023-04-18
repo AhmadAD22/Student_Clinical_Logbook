@@ -24,13 +24,14 @@ class Evaluation (models.Model):
     clinical_record=models.PositiveSmallIntegerField(null=True,blank=True)
     communication_and_team=models.PositiveSmallIntegerField(null=True,blank=True)
     leadership=models.PositiveSmallIntegerField(null=True,blank=True)
+    nots=models.TextField(blank=True,null=True)
 
 
 class ScientificAbstract(models.Model):
     
-    final_level=models.CharField(max_length=50)
+    final_level=models.CharField(max_length=10)
     summary_report=models.TextField(blank=True,null=True)
-    nots=models.TextField(blank=True,null=True)
+   
     
 
     

@@ -4,12 +4,15 @@ from rest_framework.viewsets import GenericViewSet
 from action.models import Action,ActionInformation,ActionToStudent
 from action.serializers import AddActionInformationSerializer,ActionSerializer
 from evaluation.serializers import EvaluationSerializer,ScientificAbstractSerializer
-from .serializers import EvaluationPeperSerializer,EditeEvaluationPeperSerializer
+from .serializers import EvaluationPeperSerializer,ListEvaluationPeperSerializer
 from student.models import Student
 from .models import EvaluationPeper
 from django.http import QueryDict
-from .functions import handle_student_to_action,get_case_num
+from .functions import handle_student_to_action,get_case_num,accept_evaluation
+from evaluation.models import Evaluation,ScientificAbstract
 
+#Add Evaluation:
+# List student done by  supervisor.views.ListStudents.
 #List Actions that isn't done and the case number less than 4 for spceific Student 
 class ListActions (GenericViewSet):
     serializer_class=ActionSerializer
@@ -108,19 +111,41 @@ class EvaluationPeperViewSet(GenericViewSet):
         instance = serializer.save()
         query_dict.clear()
         return Response(serializer.data) 
-        
-        
-#test
-        
-
-class ActionInfornationViewset(GenericViewSet):
+         
+#Show Evaluations
+class ShowEvaluationsiewset(GenericViewSet):
     
     queryset =EvaluationPeper.objects.all()
-    serializer_class= EditeEvaluationPeperSerializer
+    serializer_class= ListEvaluationPeperSerializer
 
    # authentication_classes = [authentication.TokenAuthentication]
-    def list(self,request):
-        queryset =EvaluationPeper.objects.all()
-        serializer=EditeEvaluationPeperSerializer(queryset,many=True)
+    def list(self,request, *args, **kwargs):
+        student_obj=Student.objects.get(pk=kwargs['student_id'])
+        evaluation_pepers=self.queryset.filter(date=kwargs['today'],student=student_obj)
+        serializer=self.serializer_class(evaluation_pepers,many=True)
         return Response(serializer.data)
     
+#Delete Evaluations
+class DeleteEvaluationPeper(GenericViewSet):
+    serializer_class= ListEvaluationPeperSerializer
+    def delete(self, request, *args, **kwargs):
+        evaluationPeper_obj=EvaluationPeper.objects.get(pk=kwargs['peper_id'])
+        print(evaluationPeper_obj)
+        evaluation=Evaluation.objects.get(id=evaluationPeper_obj.evaluation.id)
+        print(evaluation)
+        abstract=ScientificAbstract.objects.get(id=evaluationPeper_obj.abstract.id)
+        print(abstract)
+        actioninfo=ActionInformation.objects.get(id=evaluationPeper_obj.actioninfo.id)
+        print(actioninfo)
+        actiontostudent=ActionToStudent.objects.filter(student=evaluationPeper_obj.student,action=evaluationPeper_obj.actioninfo.Action).first()
+        if accept_evaluation(evaluationPeper_obj.evaluation.id):
+             actiontostudent.case_num-=1
+             actiontostudent.done=False 
+        else:
+            actiontostudent.case_num-=1
+        evaluation.delete()
+        abstract.delete()
+        actioninfo.delete()
+        evaluationPeper_obj.delete()
+        return Response("The evaluation peper has been deleted!!")
+        

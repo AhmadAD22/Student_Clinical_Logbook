@@ -23,8 +23,6 @@ class ActionViewset(GenericViewSet):
         serializer= ActionSerializer(queryset,many=True)
         return Response(serializer.data)
     
-    
-    
 class DetaledActionMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
                         mixins.CreateModelMixin,

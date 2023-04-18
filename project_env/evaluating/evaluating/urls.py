@@ -18,12 +18,13 @@ from django.urls import path,include
 from auth_users import urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('topadmin/', admin.site.urls),
      path('auth/', include('auth_users.urls')),
     path('student/',include('student.urls')),
     path('action/',include('action.urls')),
     path('evaluation/',include('evaluation.urls')),
     path('supervisor/',include('supervisor.urls')),
     path('leader/',include('leader.urls')),
+    path('admin/',include('admin.urls')),
 
 ]

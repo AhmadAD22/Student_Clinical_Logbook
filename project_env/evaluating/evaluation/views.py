@@ -1,12 +1,10 @@
 from rest_framework import mixins
 from rest_framework import generics
 from .models import Evaluation,ScientificAbstract
-from rest_framework.viewsets import GenericViewSet
 from .serializers import EvaluationSerializer,ScientificAbstractSerializer
 #from rest_framework.response import Response
 
 
-# Create your views here.
 class DetaledEvaluationMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
                         mixins.DestroyModelMixin,

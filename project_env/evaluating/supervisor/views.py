@@ -4,22 +4,25 @@ from rest_framework.response import Response
 from .serializers import UserSerializer,StudentSerializer1
 from student.models import Student
 from student.serializers import StudentSerializer
-
+from auth_users.models import UserProfile
+from leader.serializers import ListEvaluationPeperSerializer
+from leader.models import EvaluationPeper
 #MAXIMUM NUMBER OF STUDENT YOU CAN ADD TO LEADER'S GROUP
 MAX_NUM_OF_STUDENT=5
 #list leaders
 class ListLeadersViewset(GenericViewSet):
-    queryset =User.objects.all()
+    queryset =UserProfile.objects.all()
    # authentication_classes = [authentication.TokenAuthentication]
    #Get All Leaders
-    def list_leaders(self,request):
-        leaders =User.objects.filter(groups__name='Leaders')
+    def list_leaders(self,request,*args, **kwargs):
+        evaluation_offiser_obj=User.objects.get(pk=kwargs['supervisor_id'])
+        leaders=UserProfile.objects.filter(evaluation_offiser=evaluation_offiser_obj)
         filtered_leaders=[]
         for leader in leaders:
-            count=Student.objects.filter(leader=leader).count()
-            filtered_leaders.append({"id":leader.pk,
-                                         "first_name":leader.first_name,
-                                         "last_name":leader.last_name,
+            count=Student.objects.filter(leader=leader.user).count()
+            filtered_leaders.append({"id":leader.user.pk,
+                                         "first_name":leader.user.first_name,
+                                         "last_name":leader.user.last_name,
                                          "count":count
                                          })
         return Response(filtered_leaders)
@@ -69,3 +72,17 @@ class SelectStudents(GenericViewSet):
            student.save()
            return Response('The student has been deleted from this group')
            
+           
+#Show Evaluations for students
+class ShowEvaluationsiewset(GenericViewSet):
+    
+    queryset =EvaluationPeper.objects.all()
+    serializer_class= ListEvaluationPeperSerializer
+
+   # authentication_classes = [authentication.TokenAuthentication]
+    def list(self,request, *args, **kwargs):
+        student_obj=Student.objects.get(pk=kwargs['student_id'])
+        evaluation_pepers=self.queryset.filter(student=student_obj)
+        serializer=self.serializer_class(evaluation_pepers,many=True)
+        return Response(serializer.data)
+    
