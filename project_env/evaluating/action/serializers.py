@@ -5,7 +5,12 @@ class ActionSerializer(serializers.ModelSerializer):
     class Meta:
         model =Action
         fields ='__all__'
-        
+      
+      
+class UpdateActionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =Action
+        fields =['type',]
 class ActionInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model =ActionInformation

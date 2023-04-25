@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import average
 
 urlpatterns = [
     #add and remove leaders to students(students group leded by leader)
@@ -11,6 +12,9 @@ urlpatterns = [
     #Show the Evaluations
      path('show/evaluate/student/<int:student_id>/',views.ShowEvaluationsiewset.as_view({'get':'list'})),
    
+   #test
+   path('average/<int:student_id>',average.GetAverage.as_view({'get':'specific_student'})),
+   path('average/all_students',average.GetAverage.as_view({'get':'all_students'})),
   
     
 ]
