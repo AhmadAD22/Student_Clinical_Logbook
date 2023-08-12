@@ -2,7 +2,6 @@ from rest_framework import mixins
 from rest_framework import generics
 from .models import Evaluation,ScientificAbstract
 from .serializers import EvaluationSerializer,ScientificAbstractSerializer
-#from rest_framework.response import Response
 
 
 class DetaledEvaluationMixins(mixins.RetrieveModelMixin,
@@ -21,6 +20,7 @@ class DetaledEvaluationMixins(mixins.RetrieveModelMixin,
     
 class DetaledScientificAbstractMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
+                        mixins.DestroyModelMixin,
                         generics.GenericAPIView):
     queryset=ScientificAbstract.objects.all()
     serializer_class=ScientificAbstractSerializer
@@ -29,5 +29,5 @@ class DetaledScientificAbstractMixins(mixins.RetrieveModelMixin,
         return self.retrieve(request,*args,**kwargs)
     def put (self,request,*args,**kwargs):
         return self.update(request,*args,**kwargs)
-   
-   
+    def delete (self,request,*args,**kwargs):
+        return self.destroy(request,*args,**kwargs)  

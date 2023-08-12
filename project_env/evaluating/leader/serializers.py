@@ -16,7 +16,7 @@ class ActionInformationSerializer(serializers.ModelSerializer):
     Action =ActionSerialize()
     class Meta:
         model =ActionInformation
-        fields =['place','patient_type','complexity_level','case_number','Action']
+        fields =['id','place','patient_type','complexity_level','case_number','Action']
              
 class EvaluationPeperSerializer(serializers.ModelSerializer):
     class Meta:

@@ -9,4 +9,4 @@ class EvaluationSerializer(serializers.ModelSerializer):
 class ScientificAbstractSerializer(serializers.ModelSerializer):
     class Meta:
         model =ScientificAbstract
-        fields =['final_level','summary_report']
+        fields =['id','final_level','summary_report']

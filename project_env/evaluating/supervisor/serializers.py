@@ -3,7 +3,6 @@ from rest_framework import serializers
 from student.models import Student
 
 class UserSerializer(serializers.ModelSerializer):
-    # subjets=serializers.StringRelatedField(many=True)
     class Meta:
         model = User
         fields = ['id','first_name','last_name', 'username']

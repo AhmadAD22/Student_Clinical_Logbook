@@ -5,6 +5,7 @@ from leader.serializers import UserSerializer
 from rest_framework.response import Response
 from auth_users.models import UserProfile 
 
+# EVALUATION OFFUSER is supervisor in code
 #MAXIMUM NUMBER OF LEADERS YOU CAN ADD TO EVALUATION OFFUSER'S GROUP
 MAX_NUM_OF_LEADERS=5
 
@@ -13,7 +14,7 @@ class ListEvaluationOffiser(GenericViewSet):
     
     def list (self,request,*args, **kwargs):
         filtered_evaluation_offiser=[]
-        for evaluation_offiser in self.queryset:
+        for evaluation_offiser in User.objects.filter(groups__name='Evaluation Offiser'):
             count=UserProfile.objects.filter(evaluation_offiser=evaluation_offiser).count()
             filtered_evaluation_offiser.append({"id":evaluation_offiser.pk,
                                          "first_name":evaluation_offiser.first_name,
@@ -27,7 +28,7 @@ class ListLeaders (GenericViewSet):
     #Get all leaders that aren't belong to group
     def without_evaluation_offiser(self,request,*args, **kwargs):
         filtered_leaders=[]
-        for leader in self.queryset:
+        for leader in User.objects.filter(groups__name='Leaders'):
             leader_profile=UserProfile.objects.filter(user=leader).first()
             print(leader)
             print(leader_profile)
@@ -70,7 +71,7 @@ class SelectLeaders(GenericViewSet):
              return Response("You can't Add ,This Evaluation Offiser has " +str(MAX_NUM_OF_LEADERS) +" Leaders")
          else:
              for leader_id in selected_leaders:
-                 leader_obj=self.queryset.filter(id=leader_id).first()
+                 leader_obj=User.objects.filter(id=leader_id).first()
                  leader__profile_obj=UserProfile.objects.filter(user=leader_obj).first()
                  leader__profile_obj.evaluation_offiser=evaluation_offiser_obj
                  leader__profile_obj.save()
@@ -78,7 +79,7 @@ class SelectLeaders(GenericViewSet):
              leaders_can_add=5-count
              return Response("You can add "+str(leaders_can_add)+" Leader/s")
      def unselect (self,request,*args, **kwargs):
-         leader_obj=self.queryset.filter(id=self.request.data.get("leader_id")).first()
+         leader_obj=User.objects.sqfilter(id=self.request.data.get("leader_id")).first()
          leader_profile_obj=UserProfile.objects.filter(user=leader_obj).first()
          leader_profile_obj.evaluation_offiser=None
          leader_profile_obj.save()

@@ -14,7 +14,8 @@ class ActionViewset(GenericViewSet):
    # authentication_classes = [authentication.TokenAuthentication]
    
     def list(self,request ,*args, **kwargs):
-        serializer= ActionSerializer(self.queryset,many=True)
+        actions =Action.objects.all()
+        serializer= ActionSerializer(actions,many=True)
         return Response(serializer.data)
 
     def listbyclass(self,request,type):
@@ -24,8 +25,6 @@ class ActionViewset(GenericViewSet):
     
 class DetaledActionMixins(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
-                        mixins.CreateModelMixin,
-                        mixins.DestroyModelMixin,
                         generics.GenericAPIView):
     queryset=Action.objects.all()
     serializer_class=UpdateActionSerializer
